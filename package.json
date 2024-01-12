@@ -1,0 +1,24 @@
+{
+  "type": "module",
+  "name": "silkpath",
+  "description": "Utility functions for processing SVG paths",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "node --test test/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SpiderStrategies/silkpath.git"
+  },
+  "keywords": [
+    "svg",
+    "path"
+  ],
+  "author": "Nathan Bowser <nathan.bowser@spiderstrategies.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SpiderStrategies/silkpath/issues"
+  },
+  "homepage": "https://github.com/SpiderStrategies/silkpath#readme"
+}
