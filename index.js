@@ -52,47 +52,6 @@ export function calculateSubcurve(t, p0, p1, p2, p3) {
 }
 
 /**
- * Translates an SVG path by the specified x and y offsets.
- *
- * @param {string} path - The SVG path to translate.
- * @param {number} newX - The x offset.
- * @param {number} newY - The y offset.
- * @returns {string} The translated SVG path.
- */
-export function translatePath(path, newX, newY) {
-  function processSegment(segment) {
-    const command = segment.substring(0, 1)
-    const coords = segment.substring(1).trim()
-
-    if (coords.length === 0) {
-      return command
-    }
-
-    switch (command) {
-      case 'M':
-      case 'L':
-      case 'C':
-      case 'Q':
-        return command + coords.split(/[\s,]+/).map((coord, index) => {
-          let value = parseFloat(coord)
-          return index % 2 === 0 ? value + newX : value + newY
-        }).join(',')
-      case 'A':
-        const arcParams = coords.split(/[\s,]+/)
-        const lastIndex = arcParams.length - 1
-        arcParams[lastIndex - 1] = parseFloat(arcParams[lastIndex - 1]) + newX
-        arcParams[lastIndex] = parseFloat(arcParams[lastIndex]) + newY
-        return command + arcParams.join(' ')
-      default:
-        return segment
-    }
-  }
-
-  const segments = path.match(/([MLCAQZ][^MLCAQZ]*)/g)
-  return segments.map(processSegment).join(' ')
-}
-
-/**
  * Extracts points from an SVG path.
  *
  * @param {string} path - The SVG path string.
