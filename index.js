@@ -256,6 +256,49 @@ export function mirrorCurve(curve, axis) {
 }
 
 /**
+ * Mirrors the SVG path commands horizontally across a specified vertical line.
+ * This function processes an SVG path data string and mirrors each command horizontally.
+ *
+ * @param {string} originalPath - The original SVG path string.
+ * @param {number} mirrorLineX - The x-coordinate of the vertical line across which to mirror the path.
+ * @returns {string} A new SVG path string with commands mirrored horizontally.
+ *
+ * Each command in the SVG path (e.g., 'M' for move, 'L' for line, 'C' for cubic bezier, 'Z' for closepath)
+ * is processed differently:
+ * - 'M', 'L', 'C' commands: Each x-coordinate following these commands is mirrored.
+ * - 'Z' command: This command is copied directly as it does not involve coordinates.
+ */
+export function mirrorPath(originalPath, mirrorLineX) {
+  // Split the path by the command letters to isolate the coordinates
+  const commands = originalPath.match(/[MCLZ][^MCLZ]*/g)
+  const mirrored = []
+
+  commands.forEach(command => {
+    // Get the command letter (like M, C, L, Z)
+    const commandType = command[0]
+    // Extract the pairs of coordinates following the command letter
+    const coordsText = command.slice(1).trim()
+
+    // Check if command is 'Z', which doesn't require coordinate transformations
+    if (commandType === 'Z') {
+      mirrored.push('Z')
+      return // Skip further processing for 'Z'
+    }
+
+    // Split the coordinates into numbers and mirror the x-coordinates
+    const coords = coordsText.split(/[\s,]+/).map(parseFloat)
+    for (let i = 0; i < coords.length; i += 2) {
+      // Mirror the x-coordinate
+      coords[i] = 2 * mirrorLineX - coords[i]
+    }
+    // Build the mirrored command by joining modified coordinates with the command letter
+    mirrored.push(`${commandType} ${coords.join(' ')}`)
+  })
+
+  return mirrored.join(' ').trim()
+}
+
+/**
  * Reverses an SVG path consisting of a move command followed by a cubic Bezier curve.
  *
  * @param {string} path - The SVG path string to reverse.
